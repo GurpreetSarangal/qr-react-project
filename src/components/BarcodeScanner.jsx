@@ -1,7 +1,5 @@
 import { Component } from 'react';
 import Scanner from './Scanner';
-import { Fab, TextareaAutosize, Paper, Button } from '@mui/material';
-import { ArrowBack } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 import { Exception } from '@zxing/library';
 
@@ -35,20 +33,22 @@ class BarcodeScanner extends Component {
       console.log(e);
     }
   };
+  
+
 
   render() {
     return (
       <div>
         <Link to="/">
-          <Fab style={{ marginRight: 10 }} color="secondary">
-            <ArrowBack />
-          </Fab>
+          <div style={{ marginRight: 10 }} color="secondary">
+            &lt;
+          </div>
         </Link>
         <span>Barcode Scanner</span>
 
-        <Paper variant="outlined" style={{ marginTop: 30, width: 640, height: 320 }}>
+        <div style={{ marginTop: 30, width: 640, height: 320 }}>
           <Scanner onDetected={this._onDetected} />
-        </Paper>
+        </div>
 
         <textarea
           style={{ fontSize: 32, width: 320, height: 100, marginTop: 30 }}
@@ -64,25 +64,34 @@ class BarcodeScanner extends Component {
           readOnly
         />
 
-        <Button variant="text" onClick={() => {
+        {console.log(this.state.results)}
+
+        <button onClick={() => {
           try {
-            if (!this.state.results.some(r => r.codeResult.code === this.state.latestCode)) {
+            // console.log(this.state.results)
+            if (this.state.results.length == 0 && this.state.latestCode !== '') {
               this.setState((prevState) => ({
                 results: [...prevState.results, this.state.latestCode],
               }));
-
+              
+            }
+            else if(!this.state.results.some(r => r === this.state.latestCode)){
+              this.setState((prevState) => ({
+                results: [...prevState.results, this.state.latestCode],
+              }));
             }
             else {
               // console.log("not saved" + this.state.latestCode)
               throw new Exception("not saved" + this.state.latestCode)
             }
+            // console.log(this.state.results)
 
           }
           catch (e) {
             console.log(e.message)
           }
 
-        }} >Save</Button>
+        }} >Save</button>
 
       </div>
     );
