@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import Scanner from './Scanner';
 import { Link } from 'react-router-dom';
-import { Exception } from '@zxing/library';
+// import { Exception } from '@zxing/library';
 
 class BarcodeScanner extends Component {
   state = {
@@ -82,7 +82,7 @@ class BarcodeScanner extends Component {
             }
             else {
               // console.log("not saved" + this.state.latestCode)
-              throw new Exception("not saved" + this.state.latestCode)
+              throw new Error("not saved" + this.state.latestCode)
             }
             // console.log(this.state.results)
 
