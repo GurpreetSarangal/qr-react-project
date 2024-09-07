@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import Scanner from './Scanner';
-import { Fab, TextareaAutosize, Paper, Button } from '@material-ui/core';
+import { Fab, TextareaAutosize, Paper, Button } from '@mui/material';
 import { ArrowBack } from '@material-ui/icons';
 import { Link } from 'react-router-dom';
 import { Exception } from '@zxing/library';
@@ -18,20 +18,20 @@ class BarcodeScanner extends Component {
   };
 
   _onDetected = (result) => {
-    try{
+    try {
       // console.log(result && result.codeResult && result.codeResult.code);
       const code = result?.codeResult?.code;
       if (code) {
         this.setState(() => ({
           // results: [...prevState.results, result],
           scanning: false,
-          latestCode: code,  
-          modalVisible: true,  
+          latestCode: code,
+          modalVisible: true,
         }));
         console.log(this.state.results)
       }
 
-    } catch(e){
+    } catch (e) {
       console.log(e);
     }
   };
@@ -50,40 +50,40 @@ class BarcodeScanner extends Component {
           <Scanner onDetected={this._onDetected} />
         </Paper>
 
-        <TextareaAutosize
+        <textarea
           style={{ fontSize: 32, width: 320, height: 100, marginTop: 30 }}
-          maxRows={4}
-        
-          value={ this.state.latestCode || 'No data scanned'}
+          rows={3}
+          value={this.state.latestCode || 'No data scanned'}
+          readOnly
         />
 
-        {<TextareaAutosize
+        <textarea
           style={{ fontSize: 32, width: 320, height: 100, marginTop: 30 }}
-          maxRows={4}
-        
-          value={this.state.modalVisible}
-        />}
+          rows={3}
+          value={String(this.state.modalVisible)}
+          readOnly
+        />
 
         <Button variant="text" onClick={() => {
-          try{
-            if (!this.state.results.some(r => r.codeResult.code === this.state.latestCode)){
+          try {
+            if (!this.state.results.some(r => r.codeResult.code === this.state.latestCode)) {
               this.setState((prevState) => ({
                 results: [...prevState.results, this.state.latestCode],
               }));
-  
+
             }
-            else{
+            else {
               // console.log("not saved" + this.state.latestCode)
               throw new Exception("not saved" + this.state.latestCode)
             }
 
           }
-          catch (e){
+          catch (e) {
             console.log(e.message)
           }
 
         }} >Save</Button>
-        
+
       </div>
     );
   }
